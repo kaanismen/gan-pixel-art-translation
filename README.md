@@ -156,13 +156,21 @@ data/dataset_pixel_art/
 └── test_B/    # held-out pixel-art images (committed)
 ```
 
-The full training set (~6,500 images, ~780 MB) was assembled by the author and is **not
+The full training set (~6,500 images, ~780 MB) was assembled by the authors and is **not
 committed** to keep the repository lightweight. Only the small `test_A` / `test_B` splits
-and the prompt files are included so the expected structure is reproducible. To train, drop
-your own (or the original) images into `train_A/` (photos) and `train_B/` (pixel-art).
+and the prompt files are included so the expected structure is reproducible.
 
-> **Add a dataset link here** (e.g. Google Drive / Kaggle / Hugging Face Datasets) so others
-> can reproduce training.
+**Download the full dataset** (published as a GitHub Release asset):
+
+```bash
+# from the repo root
+curl -L -o dataset_pixel_art.zip \
+  https://github.com/kaanismen/gan-pixel-art-translation/releases/latest/download/dataset_pixel_art.zip
+unzip -o dataset_pixel_art.zip -d data/
+```
+
+This restores `data/dataset_pixel_art/{train_A,train_B,test_A,test_B}`. Alternatively, drop
+your own images into `train_A/` (photos) and `train_B/` (pixel-art) following the same layout.
 
 ## Training
 
