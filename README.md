@@ -128,8 +128,8 @@ Requires an **NVIDIA GPU with CUDA** — the model calls `.cuda()` directly and 
 for CPU-only inference.
 
 ```bash
-git clone <your-repo-url>
-cd <repo>
+git clone https://github.com/kaanismen/gan-pixel-art-translation.git
+cd gan-pixel-art-translation
 
 # (recommended) create an isolated environment
 python -m venv venv

@@ -12,7 +12,7 @@ abstract: >-
   with a differentiable palette loss. Özyeğin University CS402 Senior Project, 2025.
 date-released: 2025-06-01
 license: MIT
-repository-code: "<your-repo-url>"
+repository-code: "https://github.com/kaanismen/gan-pixel-art-translation"
 references:
   - type: article
     title: "One-Step Image Translation with Text-to-Image Models"
