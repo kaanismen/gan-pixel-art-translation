@@ -237,8 +237,11 @@ flatter, more quantized color distribution typical of pixel art:
 </p>
 <p align="center"><em>Baseline (left) vs. palette-loss model (right), same input scene.</em></p>
 
-> These are experimental graduation-project results; quality varies with training length,
-> resolution and `lambda_palette`. Reproduce and extend the comparison with your own runs.
+> **Evaluation is qualitative.** Due to limited compute, every model was trained for a small
+> budget (on the order of a few thousand iterations), and quantitative metrics such as FID
+> were **not** computed. The images above are illustrative, not a benchmark — results
+> improve with longer training, higher resolution and a larger `lambda_palette`. Reproduce
+> and extend the comparison with your own runs.
 
 ## Notebooks
 
