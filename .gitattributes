@@ -1,0 +1,13 @@
+# Normalize line endings for text files
+* text=auto eol=lf
+
+# Treat these as binary (no EOL conversion / no diff)
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.bmp binary
+*.pkl binary
+*.pt  binary
+*.pth binary
+*.ipynb -text

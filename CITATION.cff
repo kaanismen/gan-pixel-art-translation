@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "If you use this project, please cite the underlying One-Step Image Translation paper and this repository."
+title: "Photo to Pixel-Art Translation with CycleGAN-Turbo and Palette Loss"
+authors:
+  - family-names: "<YOUR LAST NAME>"
+    given-names: "<YOUR FIRST NAME>"
+date-released: 2025-01-01
+license: MIT
+repository-code: "<your-repo-url>"
+references:
+  - type: article
+    title: "One-Step Image Translation with Text-to-Image Models"
+    authors:
+      - family-names: Parmar
+        given-names: Gaurav
+      - family-names: Park
+        given-names: Taesung
+      - family-names: Narasimhan
+        given-names: Srinivasa
+      - family-names: Zhu
+        given-names: Jun-Yan
+    year: 2024
+    url: "https://arxiv.org/abs/2403.12036"

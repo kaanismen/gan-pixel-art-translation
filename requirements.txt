@@ -1,0 +1,36 @@
+# Core deep-learning stack
+torch>=2.0.1
+torchvision>=0.15.2
+torchaudio>=2.0.2
+
+# Diffusion / transformer backbone (SD-Turbo)
+diffusers==0.25.1
+transformers==4.35.2
+tokenizers
+peft
+accelerate
+
+# Losses & metrics used during training
+lpips
+clean-fid
+vision-aided-loss
+torchmetrics>=1.0.1
+clip @ git+https://github.com/openai/CLIP.git
+open-clip-torch>=2.20.0
+timm>=0.9.2
+
+# Image / data utilities
+numpy>=1.24.4
+pillow>=9.5.0
+opencv-python==4.6.0.66
+scipy==1.11.1
+einops>=0.6.1
+tqdm>=4.65.0
+requests
+
+# Experiment tracking & demo
+wandb
+gradio==3.43.1
+
+# Optional: faster attention on supported GPUs
+# xformers>=0.0.20

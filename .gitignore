@@ -1,0 +1,85 @@
+# ---------------------------------------------------------------------------
+# Project-specific
+# ---------------------------------------------------------------------------
+# Trained checkpoints / downloaded pretrained weights
+checkpoints/
+*.pkl
+*.pt
+*.pth
+
+# Training / inference outputs and experiment logs
+outputs/
+output/
+wandb/
+single_step_translation/
+img2img-turbo-sketch/
+
+# Large dataset: the full pixel-art training set (~6.5k images, ~780 MB) is
+# NOT tracked in git. Only the small test split and the fixed prompts are kept
+# so the expected folder layout is reproducible. See README ("Dataset").
+data/dataset_pixel_art/train_A/
+data/dataset_pixel_art/train_B/
+
+# ---------------------------------------------------------------------------
+# Python
+# ---------------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Jupyter
+.ipynb_checkpoints
+
+# Testing / coverage
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# Type checkers
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pytype/
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
