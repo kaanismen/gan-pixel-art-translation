@@ -1,10 +1,16 @@
 cff-version: 1.2.0
 message: "If you use this project, please cite the underlying One-Step Image Translation paper and this repository."
-title: "Photo to Pixel-Art Translation with CycleGAN-Turbo and Palette Loss"
+title: "GPA: GAN-made Pixel-Art Translation Using Deep-Learning Techniques"
 authors:
-  - family-names: "<YOUR LAST NAME>"
-    given-names: "<YOUR FIRST NAME>"
-date-released: 2025-01-01
+  - family-names: "İşmen"
+    given-names: "Kaan Ümit"
+  - family-names: "Yıldırım"
+    given-names: "Emre Batuhan"
+abstract: >-
+  A single-step, unpaired image-to-image translation system that converts real
+  photographs into pixel-art, built on CycleGAN-Turbo (img2img-turbo) and extended
+  with a differentiable palette loss. Özyeğin University CS402 Senior Project, 2025.
+date-released: 2025-06-01
 license: MIT
 repository-code: "<your-repo-url>"
 references:

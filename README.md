@@ -1,9 +1,12 @@
-# Photo → Pixel-Art Translation with CycleGAN-Turbo + Palette Loss
+# GPA — GAN-made Pixel-Art Translation
 
 > One-step, unpaired image-to-image translation that turns real landscape/architecture
 > photographs into **pixel-art**, built on top of [img2img-turbo](https://github.com/GaParmar/img2img-turbo)
 > (CycleGAN-Turbo) and extended with a custom **palette loss** to enforce the limited,
 > quantized color palette that is characteristic of pixel art.
+>
+> Özyeğin University · Faculty of Engineering · CS402 Senior Project (2025 Spring)
+> Authors: **Kaan Ümit İşmen**, **Emre Batuhan Yıldırım** · Supervisor: **Hasan Fehmi Ateş**
 
 <p align="center">
   <img src="assets/example_input_campus.jpg"  width="45%" alt="Input photo"/>

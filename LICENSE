@@ -2,7 +2,8 @@ MIT License
 
 Copyright (c) 2024 Gaurav Parmar, Taesung Park, Srinivasa Narasimhan, Jun-Yan Zhu
     (original img2img-turbo / CycleGAN-Turbo & pix2pix-turbo implementation)
-Copyright (c) 2025 <YOUR NAME> (pixel-art adaptation and palette-loss extensions)
+Copyright (c) 2025 Kaan Ümit İşmen and Emre Batuhan Yıldırım
+    (pixel-art adaptation and palette-loss extensions)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
