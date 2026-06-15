@@ -165,7 +165,7 @@ and the prompt files are included so the expected structure is reproducible.
 ```bash
 # from the repo root
 curl -L -o dataset_pixel_art.zip \
-  https://github.com/kaanismen/gan-pixel-art-translation/releases/latest/download/dataset_pixel_art.zip
+  https://github.com/kaanismen/gan-pixel-art-translation/releases/download/dataset-v1/dataset_pixel_art.zip
 unzip -o dataset_pixel_art.zip -d data/
 ```
 
