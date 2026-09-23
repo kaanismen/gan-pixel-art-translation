@@ -60,8 +60,10 @@ Compared to the upstream [img2img-turbo](https://github.com/GaParmar/img2img-tur
 
 | Addition | Where | Description |
 |----------|-------|-------------|
-| **Soft-histogram palette loss** | [`src/train_cyclegan_turbo_final.py`](src/train_cyclegan_turbo_final.py) | A differentiable, soft (Gaussian-binned) per-channel color histogram is computed for the cycle-reconstructed images and matched (L1) against the target-domain images. Encourages the generator to reproduce the target palette distribution. |
-| **Quantization palette loss (variants)** | [`src/train_cyclegan_turbo.py`](src/train_cyclegan_turbo.py), [`src/modified_training.py`](src/modified_training.py) | Earlier experiments that quantize the generated/cycle images (`quantize_tensor`) and penalize the L1 distance to the quantized version, directly rewarding a reduced color count. |
+| **Quantization palette loss** | [`src/train_cyclegan_turbo.py`](src/train_cyclegan_turbo.py), [`src/modified_training.py`](src/modified_training.py) | Quantizes the generated images (`quantize_tensor`) and penalizes the L1 distance to the quantized version, directly rewarding a reduced color count. **This is the palette loss used in the recorded palette-loss experiments** (`--lambda_palette 0.1`). |
+| **Soft-histogram palette loss** | [`src/train_cyclegan_turbo_final.py`](src/train_cyclegan_turbo_final.py) | A differentiable, soft (Gaussian-binned) per-channel color histogram is computed for the cycle-reconstructed images and matched (L1) against the target-domain images. Implemented as the successor to the quantization loss; its only recorded run used `--lambda_palette 0.0`, so its effect has not been measured yet. |
+| **Single-pass generator update** | [`src/train_cyclegan_turbo.py`](src/train_cyclegan_turbo.py) | The upstream script runs three separate backward passes and optimizer steps (cycle, adversarial, identity). Here the three objectives are summed into one loss with a single backward pass, which lowers peak GPU memory and keeps the gradients balanced. |
+| **Edge simplification** | Colab environment (see notes) | Canny edge presets (`default`, `medium` = low threshold 125, `low` = low threshold 150) plus removal of connected edge regions below a minimum area, so inputs carry fewer fine contours. Used in the `medium_125` / `low_150` experiments. |
 | **New CLI args** | [`src/my_utils/training_utils.py`](src/my_utils/training_utils.py) | `--palette_loss {none,active}`, `--lambda_palette`, `--num_bins`, `--sigma`. |
 | **Pixel-art dataset & prompts** | [`data/dataset_pixel_art/`](data/dataset_pixel_art) | Unpaired photo/pixel-art dataset with fixed prompts `"real photo of landscape"` (A) and `"pixel art"` (B). |
 
@@ -175,7 +177,8 @@ your own images into `train_A/` (photos) and `train_B/` (pixel-art) following th
 ## Training
 
 The canonical script is **`src/train_cyclegan_turbo_final.py`** (soft-histogram palette loss).
-This is the exact configuration used in the experiments (run from the repo root):
+The command below is the configuration of the recorded baseline run (`pixeltraining128_default`,
+palette loss computed but weighted at `0.0`). Run from the repo root:
 
 ```bash
 accelerate launch --num_processes 1 --num_machines 1 --mixed_precision fp16 --dynamo_backend no \
@@ -245,11 +248,32 @@ flatter, more quantized color distribution typical of pixel art:
 </p>
 <p align="center"><em>Baseline (left) vs. palette-loss model (right), same input scene.</em></p>
 
-> **Evaluation is qualitative.** Due to limited compute, every model was trained for a small
-> budget (on the order of a few thousand iterations), and quantitative metrics such as FID
-> were **not** computed. The images above are illustrative, not a benchmark — results
-> improve with longer training, higher resolution and a larger `lambda_palette`. Reproduce
-> and extend the comparison with your own runs.
+### Measured results
+
+Structure preservation was measured with **DINO structure distance** (input vs. translated
+image; lower means more of the input's structure is kept), logged to Weights & Biases at each
+validation step. Final values for the runs that trained past a few hundred steps:
+
+| Configuration | Steps | DINO structure distance ↓ |
+|---------------|-------|---------------------------|
+| No palette loss, no edge filtering, 64 px | ~3,600–3,700 | 0.007–0.008 |
+| No palette loss, no edge filtering, 128 px | ~3,000–3,400 | 0.008–0.014 |
+| Quantization palette loss + `medium` edges, 128 px | 3,000–4,050 | 0.022–0.023 |
+| Quantization palette loss + `low` edges, 128 px | ~4,150 | 0.026 |
+| Quantization palette loss, 256 px | ~3,000 | 0.021 |
+
+**Reading the table.** Edge simplification and the palette loss raised structure distance
+1.5–3× over the unmodified model at the same resolution. That is the expected direction:
+both changes deliberately remove detail and color variation to look more like pixel art, so
+a metric that rewards keeping the input's structure goes up. The table confirms the
+trade-off happened; it does not show which configuration looks best, which remains a visual
+judgment.
+
+**What was not measured.** FID was logged, but the validation set was only 3 images per
+evaluation because of compute limits, and FID needs hundreds of samples to be meaningful, so
+those values (roughly 450–525) are not reported as results. All runs are short (a few
+thousand steps), and the soft-histogram loss in the final script has not yet been evaluated
+with a non-zero weight.
 
 ## Notebooks
 
@@ -272,8 +296,12 @@ way to run the project.
   `palette_loss_every`) that were patched live inside the Colab notebooks and are **not**
   present in this snapshot of `training_utils.py`. Use the final script unless you port
   those patches over.
-- **`lambda_palette`.** The recorded run used `--lambda_palette 0.0` (baseline); set it
-  `> 0` to apply the palette loss.
+- **`lambda_palette`.** The recorded palette-loss experiments used the quantization loss in
+  `train_cyclegan_turbo.py` at `--lambda_palette 0.1`. The final soft-histogram script was only
+  run at `0.0` (baseline); set it `> 0` to apply it.
+- **Edge-filtering code.** The Canny presets and minimum-area filtering were patched into
+  the Colab environment (via the `image_edge` option) and are not included in this snapshot
+  of the repository.
 - The paired pix2pix-turbo code and the Gradio Canny→Image demo are kept from upstream and
   are not part of the pixel-art contribution.
 
