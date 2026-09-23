@@ -63,7 +63,7 @@ Compared to the upstream [img2img-turbo](https://github.com/GaParmar/img2img-tur
 | **Quantization palette loss** | [`src/train_cyclegan_turbo.py`](src/train_cyclegan_turbo.py), [`src/modified_training.py`](src/modified_training.py) | Quantizes the generated images (`quantize_tensor`) and penalizes the L1 distance to the quantized version, directly rewarding a reduced color count. **This is the palette loss used in the recorded palette-loss experiments** (`--lambda_palette 0.1`). |
 | **Soft-histogram palette loss** | [`src/train_cyclegan_turbo_final.py`](src/train_cyclegan_turbo_final.py) | A differentiable, soft (Gaussian-binned) per-channel color histogram is computed for the cycle-reconstructed images and matched (L1) against the target-domain images. Implemented as the successor to the quantization loss; its only recorded run used `--lambda_palette 0.0`, so its effect has not been measured yet. |
 | **Single-pass generator update** | [`src/train_cyclegan_turbo.py`](src/train_cyclegan_turbo.py) | The upstream script runs three separate backward passes and optimizer steps (cycle, adversarial, identity). Here the three objectives are summed into one loss with a single backward pass, which lowers peak GPU memory and keeps the gradients balanced. |
-| **Edge simplification** | Colab environment (see notes) | Canny edge presets (`default`, `medium` = low threshold 125, `low` = low threshold 150) plus removal of connected edge regions below a minimum area, so inputs carry fewer fine contours. Used in the `medium_125` / `low_150` experiments. |
+| **Edge simplification** | [`src/image_prep.py`](src/image_prep.py) | Canny edge presets: `default` (upstream, thresholds 100/200), `medium` (low threshold 125) and `low` (low threshold 150, min area 200 px). Connected edge regions below the minimum area are removed, so inputs carry fewer fine contours. The `medium` minimum area was tuned between 100 and 150 px during the experiments (100 in the current code, 150 in the report); which value each recorded run used was not logged. Used in the `medium_125` / `low_150` experiments. |
 | **New CLI args** | [`src/my_utils/training_utils.py`](src/my_utils/training_utils.py) | `--palette_loss {none,active}`, `--lambda_palette`, `--num_bins`, `--sigma`. |
 | **Pixel-art dataset & prompts** | [`data/dataset_pixel_art/`](data/dataset_pixel_art) | Unpaired photo/pixel-art dataset with fixed prompts `"real photo of landscape"` (A) and `"pixel art"` (B). |
 
@@ -105,7 +105,7 @@ fully differentiable through the generator.
 │   ├── cyclegan_turbo.py            # CycleGAN-Turbo model (generator, VAE wrappers, ckpt I/O)
 │   ├── pix2pix_turbo.py             # pix2pix-turbo model (paired; kept from upstream)
 │   ├── model.py                     # SD-Turbo scheduler + customized VAE fwd w/ skip convs
-│   ├── image_prep.py                # Canny edge helper (for the paired demo)
+│   ├── image_prep.py                # Canny edge presets (default / medium / low) with min-area filtering
 │   ├── inference_unpaired.py        # CLI inference for CycleGAN-Turbo (photo → pixel-art)
 │   ├── inference_paired.py          # CLI inference for pix2pix-turbo
 │   ├── train_cyclegan_turbo_final.py  # ⭐ main training script (soft-histogram palette loss)
@@ -299,9 +299,9 @@ way to run the project.
 - **`lambda_palette`.** The recorded palette-loss experiments used the quantization loss in
   `train_cyclegan_turbo.py` at `--lambda_palette 0.1`. The final soft-histogram script was only
   run at `0.0` (baseline); set it `> 0` to apply it.
-- **Edge-filtering code.** The Canny presets and minimum-area filtering were patched into
-  the Colab environment (via the `image_edge` option) and are not included in this snapshot
-  of the repository.
+- **Edge-filtering hook.** The presets live in `src/image_prep.py`. The training scripts select
+  one through an `image_edge` option on `UnpairedDataset`; that dataset change was made in the
+  edge-filtering Colab environment and is not yet in this snapshot of `training_utils.py`.
 - The paired pix2pix-turbo code and the Gradio Canny→Image demo are kept from upstream and
   are not part of the pixel-art contribution.
 
